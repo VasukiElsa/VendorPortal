@@ -1,0 +1,36 @@
+<h2>Vendor Credit/Debit Memo</h2>
+
+<table *ngIf="memos.length > 0; else noData" border="1">
+  <thead>
+    <tr>
+      <th>Memo Document No</th>
+      <th>Document Year</th>
+      <th>Posting Date</th>
+      <th>User ID</th>
+      <th>Entry Date</th>
+      <th>Memo Type</th>
+      <th>Amount</th>
+      <th>Currency</th>
+      <th>Document Type</th>
+      <th>Company Code</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let memo of memos">
+      <td>{{ memo.memoDocumentNo }}</td>
+      <td>{{ memo.documentYear }}</td>
+      <td>{{ convertSAPDate(memo.postingDate) }}</td>
+      <td>{{ memo.userId }}</td>
+      <td>{{ convertSAPDate(memo.entryDate) }}</td>
+      <td>{{ memo.memoType }}</td>
+      <td>{{ memo.amount }}</td>
+      <td>{{ memo.currency }}</td>
+      <td>{{ memo.docType }}</td>
+      <td>{{ memo.companyCode }}</td>
+    </tr>
+  </tbody>
+</table>
+
+<ng-template #noData>
+  <p>No credit/debit memo data found.</p>
+</ng-template>

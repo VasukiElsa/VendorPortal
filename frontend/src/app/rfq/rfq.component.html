@@ -1,0 +1,244 @@
+<div class="page-container">
+  <!-- Header Section -->
+  <div class="page-header">
+    <div class="header-content">
+      <div class="header-left">
+        <div class="page-title">
+          <div class="title-icon">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M9 12L11 14L15 10M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M12 2V6M12 18V22M4.93 4.93L7.76 7.76M16.24 16.24L19.07 19.07M2 12H6M18 12H22M4.93 19.07L7.76 16.24M16.24 7.76L19.07 4.93" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <div class="title-content">
+            <h1>Request for Quotation</h1>
+            <p>Manage and track your RFQ submissions</p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="header-right">
+        <div class="header-stats">
+          <div class="stat-item">
+            <span class="stat-number">{{ rfqList.length }}</span>
+            <span class="stat-label">Total RFQs</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-number">{{ getActiveRFQs() }}</span>
+            <span class="stat-label">Active</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Controls Section -->
+  <div class="controls-section">
+    <div class="controls-content">
+      <div class="search-box">
+        <div class="search-input-wrapper">
+          <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M21 21L16.65 16.65" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <input 
+            type="text" 
+            placeholder="Search RFQs..." 
+            class="search-input"
+            [(ngModel)]="searchTerm"
+            (input)="onSearch()"
+          />
+        </div>
+      </div>
+      
+      <div class="filter-controls">
+        <button class="btn btn-secondary filter-btn" (click)="toggleFilters()">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M22 3H2L10 12.46V19L14 21V12.46L22 3Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          Filters
+        </button>
+        
+        <button class="btn btn-primary export-btn" (click)="exportData()">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M21 15V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M7 10L12 15L17 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M12 15V3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          Export
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="content-section">
+    <!-- Loading State -->
+    <div *ngIf="isLoading" class="loading-state">
+      <div class="spinner"></div>
+      <p>Loading RFQ data...</p>
+    </div>
+
+    <!-- Data Table -->
+    <div *ngIf="!isLoading && rfqList.length > 0" class="table-container">
+      <div class="table-wrapper">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th class="sortable" (click)="sortBy('rfqNumber')">
+                <div class="th-content">
+                  <span>RFQ Number</span>
+                  <svg class="sort-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M7 15L12 10L17 15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </div>
+              </th>
+              <th class="sortable" (click)="sortBy('rfqCreation')">
+                <div class="th-content">
+                  <span>RFQ Date</span>
+                  <svg class="sort-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M7 15L12 10L17 15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </div>
+              </th>
+              <th>Vendor</th>
+              <th>Material</th>
+              <th>Quantity</th>
+              <th>Organization</th>
+              <th>Bid Date</th>
+              <th>Delivery Date</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let rfq of filteredRFQs" class="table-row">
+              <td class="rfq-number">
+                <div class="cell-content">
+                  <span class="primary-text">{{ rfq.rfqNumber }}</span>
+                  <span class="secondary-text">ID: {{ rfq.userId }}</span>
+                </div>
+              </td>
+              <td class="date-cell">
+                <div class="cell-content">
+                  <span class="primary-text">{{ rfq.rfqCreation | date:'shortDate' }}</span>
+                  <span class="secondary-text">{{ getDaysAgo(rfq.rfqCreation) }}</span>
+                </div>
+              </td>
+              <td class="vendor-cell">
+                <div class="cell-content">
+                  <span class="primary-text">{{ rfq.vendorName }}</span>
+                  <span class="secondary-text">ID: {{ rfq.userId }}</span>
+                </div>
+              </td>
+              <td class="material-cell">
+                <div class="cell-content">
+                  <span class="primary-text">{{ rfq.materialDes }}</span>
+                  <span class="secondary-text">Material</span>
+                </div>
+              </td>
+              <td class="quantity-cell">
+                <div class="cell-content">
+                  <span class="primary-text">{{ rfq.quantity }}</span>
+                  <span class="secondary-text">{{ rfq.unit }}</span>
+                </div>
+              </td>
+              <td class="org-cell">
+                <div class="cell-content">
+                  <span class="primary-text">{{ rfq.purOrg }}</span>
+                  <span class="secondary-text">{{ rfq.orgEmail }}</span>
+                </div>
+              </td>
+              <td class="bid-cell">
+                <div class="cell-content">
+                  <span class="primary-text">{{ rfq.bidDate | date:'shortDate' }}</span>
+                  <span class="secondary-text">{{ getBidStatus(rfq.bidDate) }}</span>
+                </div>
+              </td>
+              <td class="delivery-cell">
+                <div class="cell-content">
+                  <span class="primary-text">{{ rfq.delDate | date:'shortDate' }}</span>
+                  <span class="secondary-text">{{ getDeliveryStatus(rfq.delDate) }}</span>
+                </div>
+              </td>
+              <td class="status-cell">
+                <span class="status-badge" [class]="getStatusClass(rfq)">
+                  {{ getStatusText(rfq) }}
+                </span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      
+      <!-- Pagination -->
+      <div class="pagination-section">
+        <div class="pagination-info">
+          <span>Showing {{ startIndex + 1 }}-{{ endIndex }} of {{ totalItems }} RFQs</span>
+        </div>
+        <div class="pagination-controls">
+          <button class="btn btn-secondary" [disabled]="currentPage === 1" (click)="previousPage()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            Previous
+          </button>
+          <div class="page-numbers">
+            <button 
+              *ngFor="let page of visiblePages" 
+              class="page-btn" 
+              [class.active]="page === currentPage"
+              (click)="goToPage(page)"
+            >
+              {{ page }}
+            </button>
+          </div>
+          <button class="btn btn-secondary" [disabled]="currentPage === totalPages" (click)="nextPage()">
+            Next
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Empty State -->
+    <div *ngIf="!isLoading && rfqList.length === 0" class="empty-state">
+      <div class="empty-icon">
+        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M9 12L11 14L15 10M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M12 2V6M12 18V22M4.93 4.93L7.76 7.76M16.24 16.24L19.07 19.07M2 12H6M18 12H22M4.93 19.07L7.76 16.24M16.24 7.76L19.07 4.93" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <h3>No RFQ Records</h3>
+      <p>No RFQ records found for your account.</p>
+      <button class="btn btn-primary" (click)="refreshData()">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M1 4V10H7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M23 20V14H17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M20.49 9C19.2214 7.3314 17.3672 6.1111 15.1991 5.5873C13.031 5.0635 10.7478 5.2728 8.71547 6.1853C6.68316 7.0978 5.03339 8.6579 4.00001 10.6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M3.51 15C4.77864 16.6686 6.63284 17.8889 8.80096 18.4127C10.9691 18.9365 13.2523 18.7272 15.2846 17.8147C17.3169 16.9022 18.9666 15.3421 20 13.4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        Refresh Data
+      </button>
+    </div>
+
+    <!-- No Results State -->
+    <div *ngIf="!isLoading && rfqList.length > 0 && filteredRFQs.length === 0" class="no-results-state">
+      <div class="no-results-icon">
+        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M21 21L16.65 16.65" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <h3>No Results Found</h3>
+      <p>No RFQ records match your search criteria.</p>
+      <button class="btn btn-secondary" (click)="clearSearch()">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        Clear Search
+      </button>
+    </div>
+  </div>
+</div>

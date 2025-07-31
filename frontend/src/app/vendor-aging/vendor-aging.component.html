@@ -1,0 +1,32 @@
+<h2>Vendor Aging Details</h2>
+
+<table *ngIf="agingData.length > 0; else noData" border="1">
+  <thead>
+    <tr>
+      <th>Payment Doc</th>
+      <th>Doc Year</th>
+      <th>Payment Date</th>
+      <th>User ID</th>
+      <th>Amount Paid</th>
+      <th>Currency</th>
+      <th>Due Date</th>
+      <th>Aging</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let item of agingData">
+      <td>{{ item.paymentDoc }}</td>
+      <td>{{ item.docYear }}</td>
+      <td>{{ convertSAPDate(item.paymentDate) }}</td>
+      <td>{{ item.userId }}</td>
+      <td>{{ item.amountPaid }}</td>
+      <td>{{ item.currency }}</td>
+      <td>{{ convertSAPDate(item.dueDate) }}</td>
+      <td>{{ item.aging }}</td>
+    </tr>
+  </tbody>
+</table>
+
+<ng-template #noData>
+  <p>No vendor aging data found.</p>
+</ng-template>

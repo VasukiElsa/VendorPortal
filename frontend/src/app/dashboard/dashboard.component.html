@@ -1,0 +1,398 @@
+<div class="dashboard-layout">
+  <!-- Header -->
+  <header class="dashboard-header">
+    <div class="header-content">
+      <div class="header-left">
+        <div class="logo">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M2 17L12 22L22 17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M2 12L12 17L22 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <span class="logo-text">Vendor Portal</span>
+        </div>
+  </div>
+      
+      <div class="header-right">
+        <div class="user-info" *ngIf="profile">
+          <span class="welcome-text">Welcome back,</span>
+          <span class="user-name">{{ profile.name }}</span>
+        </div>
+        <button class="btn btn-danger logout-btn" (click)="logout()">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M9 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V5C3 4.46957 3.21071 3.96086 3.58579 3.58579C3.96086 3.21071 4.46957 3 5 3H9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M16 17L21 12L16 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M21 12H9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          Logout
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <div class="dashboard-main">
+    <!-- Enhanced Sidebar -->
+    <aside class="dashboard-sidebar">
+      <!-- User Profile Section -->
+      <div class="sidebar-profile" *ngIf="profile">
+        <div class="profile-avatar">
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M20 21V19C20 17.9391 19.5786 16.9217 18.8284 16.1716C18.0783 15.4214 17.0609 15 16 15H8C6.93913 15 5.92172 15.4214 5.17157 16.1716C4.42143 16.9217 4 17.9391 4 19V21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <circle cx="12" cy="7" r="4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div class="profile-info">
+          <h4 class="profile-name">{{ profile.name }}</h4>
+          <p class="profile-role">Vendor</p>
+          <p class="profile-id">ID: {{ profile.userId }}</p>
+        </div>
+      </div>
+
+      <!-- Navigation -->
+      <nav class="sidebar-nav">
+        <div class="nav-section">
+          <h3 class="nav-section-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M3 3H21V7H3V3Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M3 10H21V14H3V10Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M3 17H21V21H3V17Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            Operations
+          </h3>
+          
+          <button 
+            class="nav-item" 
+            [class.active]="selectedSection === 'sales'"
+            (click)="selectSection('sales')"
+          >
+            <div class="nav-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M9 11H15M9 15H15M9 7H15M5 3H19C20.1046 3 21 3.89543 21 5V19C21 20.1046 20.1046 21 19 21H5C3.89543 21 3 20.1046 3 19V5C3 3.89543 3.89543 3 5 3Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <div class="nav-content">
+              <span class="nav-label">Sales Data</span>
+              <span class="nav-description">Manage sales processes</span>
+            </div>
+            <div class="nav-indicator"></div>
+          </button>
+
+          <button 
+            class="nav-item" 
+            [class.active]="selectedSection === 'financial'"
+            (click)="selectSection('financial')"
+          >
+            <div class="nav-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2V6M12 18V22M4.93 4.93L7.76 7.76M16.24 16.24L19.07 19.07M2 12H6M18 12H22M4.93 19.07L7.76 16.24M16.24 7.76L19.07 4.93" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <div class="nav-content">
+              <span class="nav-label">Financial Sheet</span>
+              <span class="nav-description">Monitor finances</span>
+            </div>
+            <div class="nav-indicator"></div>
+          </button>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="nav-section">
+          <h3 class="nav-section-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 5V19M5 12H19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            Quick Actions
+          </h3>
+          
+          <button class="nav-item quick-action" (click)="fetchProfile()">
+            <div class="nav-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M20 21V19C20 17.9391 19.5786 16.9217 18.8284 16.1716C18.0783 15.4214 17.0609 15 16 15H8C6.93913 15 5.92172 15.4214 5.17157 16.1716C4.42143 16.9217 4 17.9391 4 19V21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <circle cx="12" cy="7" r="4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <div class="nav-content">
+              <span class="nav-label">View Profile</span>
+              <span class="nav-description">Account details</span>
+            </div>
+          </button>
+        </div>
+      </nav>
+    </aside>
+
+    <!-- Content Area -->
+    <main class="dashboard-content">
+      <!-- Welcome State (Empty Dashboard) -->
+      <div *ngIf="!selectedSection" class="welcome-state">
+        <div class="welcome-content">
+          <div class="welcome-icon">
+            <svg width="80" height="80" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M2 17L12 22L22 17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M2 12L12 17L22 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <h1 class="welcome-title">Welcome to Vendor Portal</h1>
+          <p class="welcome-subtitle">Select a section from the sidebar to get started</p>
+          <div class="welcome-actions">
+            <button class="btn btn-primary" (click)="selectSection('sales')">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M9 11H15M9 15H15M9 7H15M5 3H19C20.1046 3 21 3.89543 21 5V19C21 20.1046 20.1046 21 19 21H5C3.89543 21 3 20.1046 3 19V5C3 3.89543 3.89543 3 5 3Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              Sales Operations
+            </button>
+            <button class="btn btn-secondary" (click)="selectSection('financial')">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2V6M12 18V22M4.93 4.93L7.76 7.76M16.24 16.24L19.07 19.07M2 12H6M18 12H22M4.93 19.07L7.76 16.24M16.24 7.76L19.07 4.93" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              Financial Management
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sales Section -->
+      <div *ngIf="selectedSection === 'sales'" class="content-section">
+        <div class="content-header">
+          <div class="header-info">
+            <h1 class="content-title">Sales Operations</h1>
+            <p class="content-subtitle">Manage your sales processes and track orders efficiently</p>
+          </div>
+          <div class="header-stats">
+            <div class="stat-item">
+              <span class="stat-number">3</span>
+              <span class="stat-label">Active Modules</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="content-grid">
+          <div class="feature-card sales-card" (click)="goToRFQ()">
+            <div class="card-header">
+              <div class="card-icon rfq-icon">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M9 12L11 14L15 10M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+              <div class="card-badge">Active</div>
+            </div>
+            <div class="card-content">
+              <h3>Request for Quotation</h3>
+              <p>Submit and manage RFQ responses with detailed pricing and specifications</p>
+              <div class="card-features">
+                <span class="feature-tag">Pricing</span>
+                <span class="feature-tag">Specifications</span>
+                <span class="feature-tag">Timeline</span>
+              </div>
+            </div>
+            <div class="card-footer">
+              <span class="card-action">View RFQs</span>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+          </div>
+
+          <div class="feature-card sales-card" (click)="goToPO()">
+            <div class="card-header">
+              <div class="card-icon po-icon">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M9 12H15M9 16H15M17 21H7C5.89543 21 5 20.1046 5 19V5C5 3.89543 5.89543 3 7 3H12.5858C12.851 3 13.1054 3.10536 13.2929 3.29289L19.7071 9.70711C19.8946 9.89464 20 10.149 20 10.4142V19C20 20.1046 19.1046 21 18 21H17ZM17 21V10H13C12.4477 10 12 9.55228 12 9V5H7V19H17Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+              <div class="card-badge">Active</div>
+            </div>
+            <div class="card-content">
+              <h3>Purchase Orders</h3>
+              <p>View and manage purchase orders with real-time status tracking</p>
+              <div class="card-features">
+                <span class="feature-tag">Orders</span>
+                <span class="feature-tag">Status</span>
+                <span class="feature-tag">Tracking</span>
+              </div>
+            </div>
+            <div class="card-footer">
+              <span class="card-action">View Orders</span>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+          </div>
+
+          <div class="feature-card sales-card" (click)="goToGoodsReceipt()">
+            <div class="card-header">
+              <div class="card-icon gr-icon">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M20 7L10 17L5 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+              <div class="card-badge">Active</div>
+            </div>
+            <div class="card-content">
+              <h3>Goods Receipt</h3>
+              <p>Process and track goods receipts with quality assurance checks</p>
+              <div class="card-features">
+                <span class="feature-tag">Receipt</span>
+                <span class="feature-tag">Quality</span>
+                <span class="feature-tag">Tracking</span>
+              </div>
+            </div>
+            <div class="card-footer">
+              <span class="card-action">Process Receipts</span>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Financial Section -->
+      <div *ngIf="selectedSection === 'financial'" class="content-section">
+        <div class="content-header">
+          <div class="header-info">
+            <h1 class="content-title">Financial Management</h1>
+            <p class="content-subtitle">Monitor invoices, payments, and financial documents</p>
+          </div>
+          <div class="header-stats">
+            <div class="stat-item">
+              <span class="stat-number">3</span>
+              <span class="stat-label">Financial Tools</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="content-grid">
+          <div class="feature-card financial-card" (click)="goToInvoiceDetails()">
+            <div class="card-header">
+              <div class="card-icon invoice-icon">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M14 2H6C5.46957 2 4.96086 2.21071 4.58579 2.58579C4.21071 2.96086 4 3.46957 4 4V20C4 20.5304 4.21071 21.0391 4.58579 21.4142C4.96086 21.7893 5.46957 22 6 22H18C18.5304 22 19.0391 21.7893 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V8L14 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M14 2V8H20" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M16 13H8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M16 17H8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M10 9H8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+              <div class="card-badge">Active</div>
+            </div>
+            <div class="card-content">
+              <h3>Invoice Details</h3>
+              <p>View and manage invoice information with payment tracking</p>
+              <div class="card-features">
+                <span class="feature-tag">Invoices</span>
+                <span class="feature-tag">Payments</span>
+                <span class="feature-tag">History</span>
+              </div>
+            </div>
+            <div class="card-footer">
+              <span class="card-action">View Invoices</span>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+          </div>
+
+          <div class="feature-card financial-card" (click)="goToVendorAging()">
+            <div class="card-header">
+              <div class="card-icon payment-icon">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M12 8V12L15 15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+              <div class="card-badge">Active</div>
+            </div>
+            <div class="card-content">
+              <h3>Payments & Aging</h3>
+              <p>Track payments and aging reports with detailed analytics</p>
+              <div class="card-features">
+                <span class="feature-tag">Payments</span>
+                <span class="feature-tag">Aging</span>
+                <span class="feature-tag">Analytics</span>
+              </div>
+            </div>
+            <div class="card-footer">
+              <span class="card-action">View Reports</span>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+          </div>
+
+          <div class="feature-card financial-card" (click)="goToVendorMemo()">
+            <div class="card-header">
+              <div class="card-icon memo-icon">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M9 12H15M9 16H15M17 21H7C5.89543 21 5 20.1046 5 19V5C5 3.89543 5.89543 3 7 3H12.5858C12.851 3 13.1054 3.10536 13.2929 3.29289L19.7071 9.70711C19.8946 9.89464 20 10.149 20 10.4142V19C20 20.1046 19.1046 21 18 21H17ZM17 21V10H13C12.4477 10 12 9.55228 12 9V5H7V19H17Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+              <div class="card-badge">Active</div>
+            </div>
+            <div class="card-content">
+              <h3>Credit/Debit Memo</h3>
+              <p>Manage credit and debit memos with approval workflows</p>
+              <div class="card-features">
+                <span class="feature-tag">Credits</span>
+                <span class="feature-tag">Debits</span>
+                <span class="feature-tag">Approvals</span>
+              </div>
+            </div>
+            <div class="card-footer">
+              <span class="card-action">Manage Memos</span>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+    <!-- Profile Modal -->
+  <div *ngIf="showProfileModal" class="modal-overlay" (click)="closeProfileModal()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h2>Vendor Profile</h2>
+        <button class="modal-close" (click)="closeProfileModal()">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+      </div>
+      
+      <div class="modal-body">
+        <div *ngIf="profile" class="profile-info">
+          <div class="profile-field">
+            <label>Name</label>
+            <p>{{ profile.name }}</p>
+          </div>
+          <div class="profile-field">
+            <label>User ID</label>
+            <p>{{ profile.userId }}</p>
+          </div>
+          <div class="profile-field">
+            <label>Email</label>
+            <p>{{ profile.email }}</p>
+          </div>
+          <div class="profile-field">
+            <label>Phone</label>
+            <p>{{ profile.telephone }}</p>
+          </div>
+          <div class="profile-field">
+            <label>Address</label>
+            <p>{{ profile.street }}, {{ profile.city }}, {{ profile.pincode }}, {{ profile.country }}</p>
+          </div>
+        </div>
+        
+        <div *ngIf="!profile" class="loading-state">
+          <div class="spinner"></div>
+          <p>Loading profile information...</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
