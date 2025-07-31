@@ -18,14 +18,20 @@ const vendorLoginRoute = require('./routes/vendorLoginRoute');
 const vendorProfileRoute = require('./routes/vendorProfileRoute');
 const vendorRFQRoute = require('./routes/vendorRFQRoute');
 const vendorPORoute = require('./routes/vendorPORoute');
+const vendorGRRoute = require('./routes/vendorGRRoute');
 const vendorInvoiceRoutes = require('./routes/vendorInvoiceRoute');
+const vendorPaymentsRoute = require('./routes/vendorPayments');
+const vendorMemoRoute = require('./routes/vendorMemoRoute');
 
 ;
 app.use('', vendorLoginRoute);
 app.use('/profile', vendorProfileRoute);
 app.use('/rfq', vendorRFQRoute);
 app.use('/po', vendorPORoute);
-app.use('/invoice', vendorInvoiceRoutes)
+app.use('/gr', vendorGRRoute);
+app.use('/invoice', vendorInvoiceRoutes);
+app.use('/vendor-payments', vendorPaymentsRoute);
+app.use('/vendor-memo', vendorMemoRoute);
 
 const PORT = 3000;
 app.listen(PORT, () => {
