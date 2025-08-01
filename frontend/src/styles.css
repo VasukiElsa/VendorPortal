@@ -2,10 +2,10 @@
 
 /* CSS Variables for Design System */
 :root {
-  /* Color Palette */
-  --primary-color: #2563eb;
-  --primary-dark: #1d4ed8;
-  --primary-light: #3b82f6;
+  /* Color Palette - Professional */
+  --primary-color: #667eea;
+  --primary-dark: #5a67d8;
+  --primary-light: #7c3aed;
   --secondary-color: #64748b;
   --accent-color: #10b981;
   --success-color: #059669;
@@ -127,24 +127,23 @@ p {
 }
 
 .btn-primary {
-  background-color: var(--primary-color);
+  background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
   color: var(--white);
 }
 
 .btn-primary:hover {
-  background-color: var(--primary-dark);
   transform: translateY(-1px);
   box-shadow: var(--shadow-md);
 }
 
 .btn-secondary {
-  background-color: var(--gray-100);
+  background-color: var(--white);
   color: var(--gray-700);
   border: 1px solid var(--gray-300);
 }
 
 .btn-secondary:hover {
-  background-color: var(--gray-200);
+  background-color: var(--gray-50);
   border-color: var(--gray-400);
 }
 
@@ -195,7 +194,7 @@ p {
   width: 100%;
   padding: var(--spacing-3) var(--spacing-4);
   font-size: var(--font-size-base);
-  border: 1px solid var(--gray-300);
+  border: 2px solid var(--gray-200);
   border-radius: var(--radius-lg);
   background-color: var(--white);
   transition: all var(--transition-fast);
@@ -205,7 +204,7 @@ p {
 .form-input:focus {
   outline: none;
   border-color: var(--primary-color);
-  box-shadow: 0 0 0 3px rgb(37 99 235 / 0.1);
+  box-shadow: 0 0 0 3px rgb(102 126 234 / 0.1);
 }
 
 .form-input:disabled {
@@ -251,6 +250,9 @@ p {
   border-radius: var(--radius-lg);
   margin-bottom: var(--spacing-4);
   border: 1px solid transparent;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-3);
 }
 
 .alert-success {
