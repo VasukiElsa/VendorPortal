@@ -1,36 +1,219 @@
-<h2>Vendor Credit/Debit Memo</h2>
+<div class="page-container">
+  <!-- Header Section -->
+  <div class="page-header">
+    <div class="header-content">
+      <div class="header-left">
+        <div class="page-title">
+          <div class="title-icon">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M9 12L11 14L15 10M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M12 2V6M12 18V22M4.93 4.93L7.76 7.76M16.24 16.24L19.07 19.07M2 12H6M18 12H22M4.93 19.07L7.76 16.24M16.24 7.76L19.07 4.93" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <div class="title-content">
+            <h1>Vendor Credit/Debit Memo</h1>
+            <p>Track and manage vendor credit and debit memo transactions</p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="header-right">
+        <div class="header-stats">
+          <div class="stat-item">
+            <span class="stat-number">{{ memos.length }}</span>
+            <span class="stat-label">Total Memos</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-number">{{ getTotalValue() | currency }}</span>
+            <span class="stat-label">Total Value</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
-<table *ngIf="memos.length > 0; else noData" border="1">
-  <thead>
-    <tr>
-      <th>Memo Document No</th>
-      <th>Document Year</th>
-      <th>Posting Date</th>
-      <th>User ID</th>
-      <th>Entry Date</th>
-      <th>Memo Type</th>
-      <th>Amount</th>
-      <th>Currency</th>
-      <th>Document Type</th>
-      <th>Company Code</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let memo of memos">
-      <td>{{ memo.memoDocumentNo }}</td>
-      <td>{{ memo.documentYear }}</td>
-      <td>{{ convertSAPDate(memo.postingDate) }}</td>
-      <td>{{ memo.userId }}</td>
-      <td>{{ convertSAPDate(memo.entryDate) }}</td>
-      <td>{{ memo.memoType }}</td>
-      <td>{{ memo.amount }}</td>
-      <td>{{ memo.currency }}</td>
-      <td>{{ memo.docType }}</td>
-      <td>{{ memo.companyCode }}</td>
-    </tr>
-  </tbody>
-</table>
+  <!-- Controls Section -->
+  <div class="controls-section">
+    <div class="controls-content">
+      <div class="search-box">
+        <div class="search-input-wrapper">
+          <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M21 21L16.65 16.65" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <input 
+            type="text" 
+            placeholder="Search vendor memos..." 
+            class="search-input"
+            [(ngModel)]="searchTerm"
+            (input)="onSearch()"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
 
-<ng-template #noData>
-  <p>No credit/debit memo data found.</p>
-</ng-template>
+  <!-- Main Content -->
+  <div class="content-section">
+    <!-- Loading State -->
+    <div *ngIf="isLoading" class="loading-state">
+      <div class="spinner"></div>
+      <p>Loading vendor memo data...</p>
+    </div>
+
+    <!-- Data Table -->
+    <div *ngIf="!isLoading && memos.length > 0" class="table-container">
+      <div class="table-wrapper">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th class="sortable" (click)="sortBy('memoDocumentNo')">
+                <div class="th-content">
+                  <span>Memo Document No</span>
+                  <svg class="sort-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M7 15L12 10L17 15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </div>
+              </th>
+              <th class="sortable" (click)="sortBy('postingDate')">
+                <div class="th-content">
+                  <span>Posting Date</span>
+                  <svg class="sort-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M7 15L12 10L17 15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </div>
+              </th>
+              <th>User ID</th>
+              <th class="sortable" (click)="sortBy('entryDate')">
+                <div class="th-content">
+                  <span>Entry Date</span>
+                  <svg class="sort-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M7 15L12 10L17 15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </div>
+              </th>
+              <th>Memo Type</th>
+              <th class="sortable" (click)="sortBy('amount')">
+                <div class="th-content">
+                  <span>Amount</span>
+                  <svg class="sort-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M7 15L12 10L17 15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </div>
+              </th>
+              <th>Currency</th>
+              <th>Company Code</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let memo of filteredMemos" class="table-row">
+              <td class="doc-number">
+                <div class="cell-content">
+                  <span class="primary-text">{{ memo.memoDocumentNo }}</span>
+                  <span class="secondary-text">Year: {{ memo.documentYear }}</span>
+                </div>
+              </td>
+              <td class="date-cell">
+                <div class="cell-content">
+                  <span class="primary-text">{{ convertSAPDate(memo.postingDate) }}</span>
+                </div>
+              </td>
+              <td class="user-cell">
+                <span class="user-text">{{ memo.userId }}</span>
+              </td>
+              <td class="date-cell">
+                <div class="cell-content">
+                  <span class="primary-text">{{ convertSAPDate(memo.entryDate) }}</span>
+                </div>
+              </td>
+              <td class="memo-type-cell">
+                <span class="memo-type-text" [class]="getMemoTypeClass(memo.memoType)">{{ memo.memoType }}</span>
+              </td>
+              <td class="amount-cell">
+                <div class="cell-content">
+                  <span class="primary-text">{{ memo.amount | currency }}</span>
+                </div>
+              </td>
+              <td class="currency-cell">
+                <span class="currency-text">{{ memo.currency }}</span>
+              </td>
+              <td class="company-cell">
+                <span class="company-text">{{ memo.companyCode }}</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      
+      <!-- Pagination -->
+      <div class="pagination-section">
+        <div class="pagination-info">
+          <span>Showing {{ startIndex + 1 }}-{{ endIndex }} of {{ totalItems }} records</span>
+        </div>
+        <div class="pagination-controls">
+          <button class="btn btn-secondary" [disabled]="currentPage === 1" (click)="previousPage()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            Previous
+          </button>
+          <div class="page-numbers">
+            <button 
+              *ngFor="let page of visiblePages" 
+              class="page-btn" 
+              [class.active]="page === currentPage"
+              (click)="goToPage(page)"
+            >
+              {{ page }}
+            </button>
+          </div>
+          <button class="btn btn-secondary" [disabled]="currentPage === totalPages" (click)="nextPage()">
+            Next
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Empty State -->
+    <div *ngIf="!isLoading && memos.length === 0" class="empty-state">
+      <div class="empty-icon">
+        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M9 12L11 14L15 10M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M12 2V6M12 18V22M4.93 4.93L7.76 7.76M16.24 16.24L19.07 19.07M2 12H6M18 12H22M4.93 19.07L7.76 16.24M16.24 7.76L19.07 4.93" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <h3>No Vendor Memo Records</h3>
+      <p>No vendor credit/debit memo records found for your account.</p>
+      <button class="btn btn-primary" (click)="refreshData()">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M1 4V10H7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M23 20V14H17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M20.49 9C19.2214 7.3314 17.3672 6.1111 15.1991 5.5873C13.031 5.0635 10.7478 5.2728 8.71547 6.1853C6.68316 7.0978 5.03339 8.6579 4.00001 10.6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M3.51 15C4.77864 16.6686 6.63284 17.8889 8.80096 18.4127C10.9691 18.9365 13.2523 18.7272 15.2846 17.8147C17.3169 16.9022 18.9666 15.3421 20 13.4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        Refresh Data
+      </button>
+    </div>
+
+    <!-- No Results State -->
+    <div *ngIf="!isLoading && memos.length > 0 && filteredMemos.length === 0" class="no-results-state">
+      <div class="no-results-icon">
+        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M21 21L16.65 16.65" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <h3>No Results Found</h3>
+      <p>No vendor memo records match your search criteria.</p>
+      <button class="btn btn-secondary" (click)="clearSearch()">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        Clear Search
+      </button>
+    </div>
+  </div>
+</div>

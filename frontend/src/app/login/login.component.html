@@ -1,94 +1,37 @@
 <div class="login-page">
-  <!-- Animated Background -->
-  <div class="login-background">
-    <div class="floating-shapes">
-      <div class="shape shape-1"></div>
-      <div class="shape shape-2"></div>
-      <div class="shape shape-3"></div>
-      <div class="shape shape-4"></div>
-      <div class="shape shape-5"></div>
+  <div class="left-section">
     </div>
-    <div class="pattern-grid"></div>
-  </div>
-
-  <!-- Main Login Container -->
-  <div class="login-container">
-    <!-- Centered Login Form -->
-    <div class="login-form-container">
-      <div class="form-content">
-        <!-- Header -->
-        <div class="form-header">
-          <div class="logo-section">
-            <div class="brand-logo">
-              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                <path d="M2 17L12 22L22 17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                <path d="M2 12L12 17L22 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </div>
-            <h1 class="brand-title">Vendor Portal</h1>
-            <p class="brand-subtitle">Sign in to your account</p>
-          </div>
-        </div>
-
-        <!-- Login Form -->
-        <form class="login-form" (ngSubmit)="login()" #loginForm="ngForm">
-          <div class="form-group">
-            <label for="userId" class="form-label">User ID</label>
-            <input 
-              id="userId" 
-              type="text" 
-              [(ngModel)]="userId" 
-              name="userId"
-              placeholder="Enter your user ID" 
-              class="form-input"
-              required
-              autocomplete="username"
-            />
-          </div>
-
-          <div class="form-group">
-            <label for="password" class="form-label">Password</label>
-            <input 
-              id="password" 
-              type="password" 
-              [(ngModel)]="password" 
-              name="password"
-              placeholder="Enter your password" 
-              class="form-input"
-              required
-              autocomplete="current-password"
-            />
-          </div>
-
-          <button type="submit" class="btn btn-primary login-btn" [disabled]="isLoading">
-            <span *ngIf="!isLoading">Sign In</span>
-            <div class="spinner" *ngIf="isLoading"></div>
-          </button>
-        </form>
-
-        <!-- Alert Messages -->
-        <div *ngIf="loginMessage" class="alert" [ngClass]="loginMessage.includes('success') ? 'alert-success' : 'alert-error'">
-          <svg *ngIf="loginMessage.includes('success')" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M9 12L11 14L15 10M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-          <svg *ngIf="!loginMessage.includes('success')" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M10.29 3.86L1.82 18A2 2 0 0 0 3.54 21H20.46A2 2 0 0 0 22.18 18L13.71 3.86A2 2 0 0 0 10.29 3.86Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            <path d="M12 9V13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            <path d="M12 17H12.01" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-          <span>{{ loginMessage }}</span>
-        </div>
-
-        <!-- Footer -->
-        <div class="form-footer">
-          <div class="footer-links">
-            <a href="#" class="footer-link">Forgot Password?</a>
-            <span class="separator">•</span>
-            <a href="#" class="footer-link">Need Help?</a>
-          </div>
-        </div>
+  <div class="right-section">
+    <div class="login-container">
+      <div class="header">
+        <h2>Vendor Portal</h2>
       </div>
+      <form class="login-form">
+        <div class="form-group">
+          <label for="username">Username</label>
+          <input
+            id="username"
+            type="text"
+            [(ngModel)]="userId"
+            name="username"
+            placeholder="Enter your username"
+          />
+        </div>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input
+            id="password"
+            type="password"
+            [(ngModel)]="password"
+            name="password"
+            placeholder="Enter your password"
+          />
+        </div>
+        <button type="submit" (click)="login()">Login</button>
+        <div *ngIf="loginMessage" class="error-message">
+          {{ loginMessage }}
+        </div>
+      </form>
     </div>
   </div>
 </div>
